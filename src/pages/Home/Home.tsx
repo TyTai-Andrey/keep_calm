@@ -59,9 +59,9 @@ export const Home: FC<HomeProps> = () => {
       case scrollTop >= pointsRoot[2] && scrollTop < pointsRoot[3] + listWidth:
         return pointsRoot[2];
       case scrollTop >= pointsRoot[3] + listWidth &&
-        scrollTop < 2715 + listWidth:
+        scrollTop < pointsRoot[4] + listWidth:
         return pointsRoot[3];
-      case scrollTop >= 2715 + listWidth:
+      case scrollTop >= pointsRoot[4] + listWidth:
         return pointsRoot[4];
     }
   };
