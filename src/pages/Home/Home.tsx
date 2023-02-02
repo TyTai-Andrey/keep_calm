@@ -17,6 +17,9 @@ import img5 from '@assets/images/_5.png';
 import img6 from '@assets/images/_6.png';
 import img7 from '@assets/images/_7.png';
 import img8 from '@assets/images/_8.png';
+import img9 from '@assets/images/_9.png';
+import img10 from '@assets/images/_10.png';
+import img11 from '@assets/images/_11.png';
 import { Header } from '@components/Header';
 import { Footer } from '@components/Footer';
 
@@ -31,6 +34,9 @@ export const Home: FC<HomeProps> = () => {
   const _root = useRef(null);
   const _list = useRef(null);
 
+  const pointsList = [0, 765, 1465, 2150, 2865];
+  const pointsRoot = [0, 355, 1495, 2345, 2715];
+
   useEffect(() => {
     if (_root.current && _list.current) {
       const rootHeight = (_root.current as { scrollHeight: number })
@@ -44,35 +50,61 @@ export const Home: FC<HomeProps> = () => {
     }
   }, [_root.current, _list.current]);
 
+  const getPointRoot = (scrollTop: number, listWidth: number) => {
+    switch (true) {
+      case scrollTop < pointsRoot[1] && scrollTop >= pointsRoot[0]:
+        return pointsRoot[0];
+      case scrollTop >= pointsRoot[1] && scrollTop < pointsRoot[2]:
+        return pointsRoot[1];
+      case scrollTop >= pointsRoot[2] && scrollTop < pointsRoot[3] + listWidth:
+        return pointsRoot[2];
+      case scrollTop >= pointsRoot[3] + listWidth &&
+        scrollTop < 2715 + listWidth:
+        return pointsRoot[3];
+      case scrollTop >= 2715 + listWidth:
+        return pointsRoot[4];
+    }
+  };
+
+  const getPointList = (scrollTop: number, listWidth: number) => {
+    const path = (listWidth - 100) / 4;
+
+    switch (true) {
+      case scrollTop < pointsRoot[2] + path * 1 && scrollTop >= 0:
+        return pointsList[0];
+      case scrollTop >= pointsRoot[2] + path * 1 &&
+        scrollTop < pointsRoot[2] + path * 2:
+        return pointsList[1];
+      case scrollTop >= pointsRoot[2] + path * 2 &&
+        scrollTop < pointsRoot[2] + path * 3:
+        return pointsList[2];
+      case scrollTop >= pointsRoot[2] + path * 3 &&
+        scrollTop < pointsRoot[2] + path * 4:
+        return pointsList[3];
+      case scrollTop >= pointsRoot[2] + path * 4:
+        return pointsList[4];
+    }
+  };
+
   const onScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { scrollTop } = event.target as HTMLDivElement;
 
     if (_list.current && _root.current) {
-      const listOffsetTop = (_list.current as { offsetTop: number }).offsetTop;
-
       const listWidth = (_list.current as { clientWidth: number }).clientWidth;
-      const listHeight = (_list.current as { scrollHeight: number })
-        .scrollHeight;
+      const pointY = getPointRoot(scrollTop, listWidth);
 
-      if (listOffsetTop - scrollTop >= 375) {
+      if (typeof pointY === 'number') {
         setStyleContent((prev) => ({
           ...prev,
-          transform: `translateY(-${scrollTop}px)`,
+          transform: `translateY(-${pointY}px)`,
         }));
-      } else if (scrollTop >= listOffsetTop + listWidth - 375) {
-        setStyleContent((prev) => ({
-          ...prev,
-          transform: `translateY(-${scrollTop - listWidth}px)`,
-        }));
-      } else if (
-        listOffsetTop - scrollTop <= 375 &&
-        listOffsetTop + listWidth - listHeight >= scrollTop
-      ) {
+      }
+
+      const pointX = getPointList(scrollTop, listWidth);
+      if (typeof pointX === 'number') {
         setStyleList((prev) => ({
           ...prev,
-          transform: `translateX(${
-            listWidth - listOffsetTop - scrollTop + 330
-          }px)`,
+          transform: `translateX(-${pointX}px)`,
         }));
       }
     }
@@ -89,7 +121,19 @@ export const Home: FC<HomeProps> = () => {
         <PhotosBlock longImg={img_l_1} shortImg={img_s_1} />
         <Title text={'Lorem ipsum dolor sit amet'} />
         <PhotosList
-          photos={[img1, img2, img3, img4, img5, img6, img7, img8]}
+          photos={[
+            img1,
+            img2,
+            img3,
+            img4,
+            img5,
+            img6,
+            img7,
+            img8,
+            img9,
+            img10,
+            img11,
+          ]}
           listRef={_list}
           style={styleList}
         />
