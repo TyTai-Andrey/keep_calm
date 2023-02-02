@@ -1,0 +1,32 @@
+.root {
+  width: 100%;
+  position: relative;
+
+  .scrollHelper {
+    position: relative;
+    z-index: 99;
+
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .content {
+    width: 100%;
+    overflow: hidden;
+
+    position: fixed;
+    top: 0;
+
+    .table :global {
+      .p-datatable-wrapper {
+        height: calc(100vh - 200px);
+      }
+    }
+
+    .skeleton {
+      height: calc(100vh - 140px) !important;
+      max-height: 1000px !important;
+      width: 100% !important;
+    }
+  }
+}
